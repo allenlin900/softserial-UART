@@ -5,7 +5,7 @@
 透過 GPIO + Timer的bit-bang方式實作 UART 傳輸與接收，並在收到完整訊息後自動回傳（Echo），  
 同時以LED顯示接收成功的提示。
 
-##使用技術
+## 使用技術
 - MSP430G2553 
 - C 語言
 - Timer_A Capture/Compare 中斷作為軟體 UART
