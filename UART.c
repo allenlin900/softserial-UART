@@ -8,8 +8,8 @@
 
 unsigned int txData;
 volatile char rxBuffer[RX_BUFFER_SIZE];
-volatile unsigned int rxIndex = 0;  //¬O§_¶W¹L±µ¦¬ªº¦r¼Æ 
-volatile unsigned char messageReady = 0;  //¬O§_¾ã¦ê°T®§¶Ç§¹ 
+volatile unsigned int rxIndex = 0;  //æ˜¯å¦è¶…éæ¥æ”¶çš„å­—æ•¸ 
+volatile unsigned char messageReady = 0;  //æ˜¯å¦æ•´ä¸²è¨Šæ¯å‚³å®Œ 
 
 void TimerA_UART_init(void);
 void TimerA_UART_tx(unsigned char byte);
@@ -22,11 +22,11 @@ void main(void)
     BCSCTL1 = CALBC1_8MHZ;
     DCOCTL = CALDCO_8MHZ;
     P1OUT = 0x00;
-    P1SEL |= UART_RXD;
-    P1SEL &= ~UART_TXD;
+    P1SEL |= UART_RXD; //è¨­ç‚ºUART
+    P1SEL &= ~UART_TXD; //è¨­ç‚ºGPIO
     P1DIR |= UART_TXD;
     P1DIR &= ~UART_RXD;
-    P1DIR |= BIT0;  // LED ¿é¥X
+    P1DIR |= BIT0;  // LED è¼¸å‡º
 
     __enable_interrupt();
     
@@ -47,7 +47,7 @@ void main(void)
 void TimerA_UART_print(char *string) {
     while (*string) {
         TimerA_UART_tx(*string++);
-        __delay_cycles(1000); // Á×§K¶Ç¤Ó§Ö¥X¿ù
+        __delay_cycles(1000); // é¿å…å‚³å¤ªå¿«å‡ºéŒ¯
     }
 }
 
@@ -58,7 +58,7 @@ void TimerA_UART_init(void) {
 }
 
 void TimerA_UART_tx(unsigned char byte) {
-    while (TACCTL0 & CCIE);  // µ¥«İ«e¤@¦r¤¸¶Ç§¹
+    while (TACCTL0 & CCIE);  // ç­‰å¾…å‰ä¸€å­—å…ƒå‚³å®Œ
     txData = byte;
     txData |= 0x100;
     txData <<= 1;
@@ -109,9 +109,9 @@ __interrupt void Timer_A1_ISR(void) {
                             rxBuffer[rxIndex] = '\0';
                             messageReady = 1;
 
-                            P1OUT |= BIT0;              // «G¬õ¿O
-                            __delay_cycles(50000);      // ¬ù 50ms
-                            P1OUT &= ~BIT0;             // º¶¿O
+                            P1OUT |= BIT0;              // äº®ç´…ç‡ˆ
+                            __delay_cycles(50000);      // ç´„ 50ms
+                            P1OUT &= ~BIT0;             // ç†„ç‡ˆ
                         } else {
                             rxIndex++;
                         }
@@ -123,4 +123,5 @@ __interrupt void Timer_A1_ISR(void) {
             break;
     }
 }
+
 
