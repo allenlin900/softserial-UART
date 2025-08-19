@@ -91,7 +91,7 @@ __interrupt void Timer_A1_ISR(void) {
     static unsigned char rxBitCnt = 8;
     static unsigned char rxData = 0;
 
-    switch (__even_in_range(TA0IV, TA0IV_TAIFG)) {
+    switch (__even_in_range(TA0IV, TA0IV_TAIFG)) {    //分辨哪個ccl
         case TA0IV_TACCR1:
             TACCR1 += UART_TBIT;
             if (TACCTL1 & CAP) {
@@ -123,5 +123,6 @@ __interrupt void Timer_A1_ISR(void) {
             break;
     }
 }
+
 
 
